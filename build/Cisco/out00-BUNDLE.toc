@@ -1,0 +1,3 @@
+([('Cisco',
+   '/Users/aaron/Documents/github/Cisco/Cisco(Mac)/dist/Cisco',
+   'EXECUTABLE')],)
