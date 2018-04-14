@@ -14,6 +14,7 @@ COURSE_ID = 'CCNA3-106'
 CURRENT_CHAPTER = ''
 QUICK_ANSWER = False
 RETRY_LOGIN = False
+ASSIGNMENT_SCORE = 90
 
 def cisco(ACCOUNT, PASSWORD):
     # Enabled Flash
@@ -88,7 +89,7 @@ def cisco(ACCOUNT, PASSWORD):
             assignmentScore = 0 if assignmentScore == '-' else float(assignmentScore)
             assignmentButton = assignment.find_element_by_css_selector("a")
 
-            if assignmentScore < 97:
+            if assignmentScore < ASSIGNMENT_SCORE:
                 assignmentButton.click()
                 checkScore()
                 break
@@ -333,6 +334,19 @@ def tkInit():
     autoCompleteAccountInfo()
     submitButton = tk.Button(bottomformFrame, text='確認', command=submit, width=26)
     submitButton.pack()
+
+    var = tk.StringVar(value=f'作業分數低於{ASSIGNMENT_SCORE}分，將會觸發自動測驗！')
+    
+    def setScore(value):
+        var.set(f'作業分數低於{value}分，將會觸發自動測驗！')
+        global ASSIGNMENT_SCORE
+        ASSIGNMENT_SCORE = int(value)
+
+    tk.Label(footerFrame, textvariable=var).pack()
+    scrollBar = tk.Scale(footerFrame, from_=0, to=100, orient=tk.HORIZONTAL,
+        length=230, resolution=1, showvalue=0, command=setScore)
+    scrollBar.set(ASSIGNMENT_SCORE)
+    scrollBar.pack()
 
     window.mainloop()
 

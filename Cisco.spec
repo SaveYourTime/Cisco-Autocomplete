@@ -4,8 +4,8 @@ block_cipher = None
 
 
 a = Analysis(['Cisco.py'],
-             pathex=['/Users/aaron/Documents/github/Cisco/Cisco(Mac)'],
-             binaries=[('/Users/aaron/Documents/github/Cisco/Cisco(Mac)/chromedriver', '.')],
+             pathex=['/Users/aaron/Documents/github/Cisco-Autocomplete'],
+             binaries=[('/Users/aaron/Documents/github/Cisco-Autocomplete/chromedriver', '.')],
              datas=[],
              hiddenimports=[],
              hookspath=[],
@@ -14,7 +14,7 @@ a = Analysis(['Cisco.py'],
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
              cipher=block_cipher)
-a.datas += [('/img/Cisco_Logo.png', '/Users/aaron/Documents/github/Cisco/Cisco(Mac)/img/Cisco_Logo.png', 'Data')];
+a.datas += [('/img/Cisco_Logo.png', '/Users/aaron/Documents/github/Cisco-Autocomplete/img/Cisco_Logo.png', 'Data')];
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
