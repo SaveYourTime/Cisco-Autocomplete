@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
-import time, sys, os
+import time, sys, os, os.path, tempfile
 
 COURSE_ID = 'CCNA3-106'
 CURRENT_CHAPTER = ''
@@ -193,8 +193,8 @@ def cisco(ACCOUNT, PASSWORD):
         print('--->\t輸出答案')
         waitCondition = EC.presence_of_element_located((By.CSS_SELECTOR, "#items"))
         wait(waitCondition)
-        with open(f"{CURRENT_CHAPTER}.html", 'w', encoding='UTF-8') as file:
-            file.write(driver.page_source)
+        with open(f"{CURRENT_CHAPTER}.html", 'w', encoding='UTF-8') as myFile:
+            myFile.write(driver.page_source)
         driver.close()
         driver.switch_to_window(driver.window_handles[0])
         navigateToAssignments()
@@ -204,8 +204,8 @@ def cisco(ACCOUNT, PASSWORD):
         waitCondition = EC.visibility_of_element_located((By.CSS_SELECTOR, "#questions"))
         wait(waitCondition)
         #Load answers
-        with open(f"{CURRENT_CHAPTER}.html", mode='r', encoding='UTF-8') as file:
-            ANSWERS = file.read()
+        with open(f"{CURRENT_CHAPTER}.html", mode='r', encoding='UTF-8') as myFile:
+            ANSWERS = myFile.read()
         ANSWERS = BeautifulSoup(ANSWERS, 'html.parser')
         #Loop all quiz
         while find("button#next").get_attribute("aria-disabled") == "false":
@@ -268,7 +268,7 @@ def resource_path(relative_path):
 def tkInit():
     window = tk.Tk()
     window.title('Cisco')
-    window.geometry('300x230')
+    window.geometry('300x280')
 
     #Frame
     mainFrame = tk.Frame(window)
@@ -277,10 +277,16 @@ def tkInit():
     logoFrame.pack(pady=10)
     formFrame = tk.Frame(mainFrame)
     formFrame.pack()
-    leftFormFrame = tk.Frame(formFrame)
+    inputFrame = tk.Frame(formFrame)
+    inputFrame.pack()
+    leftFormFrame = tk.Frame(inputFrame)
     leftFormFrame.pack(side='left')
-    rightFormFrame = tk.Frame(formFrame)
+    rightFormFrame = tk.Frame(inputFrame)
     rightFormFrame.pack(side='right')
+    bottomformFrame = tk.Frame(formFrame)
+    bottomformFrame.pack(side='bottom')
+    footerFrame = tk.Frame(mainFrame)
+    footerFrame.pack()
 
     #Logo
     canvas = tk.Canvas(logoFrame, height=79, width=150)
@@ -292,16 +298,30 @@ def tkInit():
     #Title
     tk.Label(logoFrame, text='Cisco Networking Academy', font=("Arial", 18)).pack()
 
+    filepath = '/tmp' if sys.platform.startswith('darwin') else tempfile.gettempdir()
+    filename = os.path.join(filepath, 'cisco_info.txt')
+
     def submit():
         ACCOUNT = accountInput.get()
         PASSWORD = passwordInput.get()
         if ACCOUNT and PASSWORD:
+            with open(filename, 'w') as myFile:
+                myFile.write(','.join((ACCOUNT, PASSWORD)))
             try:
                 cisco(ACCOUNT, PASSWORD)
             except ConnectionResetError:
-                print('Browser Closed!')
+                tk.messagebox.showwarning(message='帳號或密碼有誤！')
         else:
             tk.messagebox.showwarning(message='請輸入帳號與密碼！')
+
+    def autoCompleteAccountInfo():
+        try:
+            with open(filename) as myFile:
+                account, password = myFile.read().strip().split(',')
+                accountInput.insert(0, account)
+                passwordInput.insert(0, password)
+        except:
+            print('沒有保存的帳號密碼')
 
     #Form
     tk.Label(leftFormFrame, text='帳號：').pack()
@@ -310,7 +330,8 @@ def tkInit():
     accountInput.pack()
     passwordInput = tk.Entry(rightFormFrame, show='*')
     passwordInput.pack()
-    submitButton = tk.Button(window, text='確認', command=submit, width=26)
+    autoCompleteAccountInfo()
+    submitButton = tk.Button(bottomformFrame, text='確認', command=submit, width=26)
     submitButton.pack()
 
     window.mainloop()
