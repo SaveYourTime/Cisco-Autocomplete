@@ -1,3 +1,0 @@
-([('Cisco',
-   '/Users/aaron/Documents/github/Cisco-Autocomplete/dist/Cisco',
-   'EXECUTABLE')],)

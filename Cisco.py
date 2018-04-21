@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
-import time, sys, os, os.path, tempfile
+import time, sys, os, os.path, tempfile, webbrowser
 
 COURSE_ID = 'CCNA3-106'
 CURRENT_CHAPTER = ''
@@ -267,9 +267,11 @@ def resource_path(relative_path):
     return os.path.join(os.path.abspath("."), relative_path)
 
 def tkInit():
+    webbrowser.open('https://github.com/SaveYourTime/Cisco-Autocomplete')
+
     window = tk.Tk()
     window.title('Cisco')
-    window.geometry('300x280')
+    window.geometry('300x300')
 
     #Frame
     mainFrame = tk.Frame(window)
@@ -286,8 +288,10 @@ def tkInit():
     rightFormFrame.pack(side='right')
     bottomformFrame = tk.Frame(formFrame)
     bottomformFrame.pack(side='bottom')
+    scrollBarFrame = tk.Frame(mainFrame)
+    scrollBarFrame.pack()
     footerFrame = tk.Frame(mainFrame)
-    footerFrame.pack()
+    footerFrame.pack(pady=5)
 
     #Logo
     canvas = tk.Canvas(logoFrame, height=79, width=150)
@@ -342,12 +346,23 @@ def tkInit():
         global ASSIGNMENT_SCORE
         ASSIGNMENT_SCORE = int(value)
 
-    tk.Label(footerFrame, textvariable=var).pack()
-    scrollBar = tk.Scale(footerFrame, from_=0, to=100, orient=tk.HORIZONTAL,
+    tk.Label(scrollBarFrame, textvariable=var).pack()
+    scrollBar = tk.Scale(scrollBarFrame, from_=0, to=100, orient=tk.HORIZONTAL,
         length=230, resolution=1, showvalue=0, command=setScore)
     scrollBar.set(ASSIGNMENT_SCORE)
     scrollBar.pack()
 
+    def openGithubPage():
+        webbrowser.open('https://github.com/SaveYourTime/Cisco-Autocomplete')
+
+    author = tk.Button(footerFrame, 
+    text='Github: SaveYourTime',
+    pady=2,
+    padx=10,
+    command=openGithubPage
+    )
+    author.pack()
+    
     window.mainloop()
 
 if __name__ == '__main__':
