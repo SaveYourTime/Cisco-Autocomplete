@@ -48,10 +48,10 @@ def cisco(ACCOUNT, PASSWORD):
             if success: success()
 
     def login():
-        driver.get("https://www.netacad.com/")
-        waitCondition = EC.element_to_be_clickable((By.CSS_SELECTOR, "#headerLoginLink"))
+        driver.get("https://www.netacad.com/login/")
+        waitCondition = EC.presence_of_element_located((By.CSS_SELECTOR, "#_58_INSTANCE_fm_login"))
         wait(waitCondition)
-        find("#headerLoginLink").click()
+        #find("#headerLoginLink").click()
         find("#_58_INSTANCE_fm_login").send_keys(ACCOUNT)
         find("#_58_INSTANCE_fm_password").send_keys(PASSWORD)
         find("#_58_INSTANCE_fm_password").submit()
