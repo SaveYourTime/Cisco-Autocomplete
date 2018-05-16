@@ -10,7 +10,7 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import time, sys, os, os.path, tempfile, webbrowser
 
-COURSE_ID = 'CCNA3-106'
+COURSE_ID = 'CCNA4-106'
 CURRENT_CHAPTER = ''
 QUICK_ANSWER = False
 RETRY_LOGIN = False
